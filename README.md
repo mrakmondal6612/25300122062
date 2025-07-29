@@ -17,13 +17,13 @@ Efficiently manage and shorten URLs with our MERN stack URL Shortener. This proj
   - MongoDB
 
 - **Deployment:**
-  - Render (Live Deployment: [https://ezylink.onrender.com](https://ezylink.onrender.com))
+  - Render (Live Deployment: [https://ezylink.onrender.com])
 
 - **Authentication:**
   - Google OAuth 2.0 using Passport.js
 
 - **API and Data:**
-  - IP Data from [ipapi](https://ipapi.co/)
+  - IP Data from [ipapi]
 
 - **Redis (Local Deployment):**
   - WSL (Windows Subsystem for Linux)

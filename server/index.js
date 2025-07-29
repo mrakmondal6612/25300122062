@@ -1,6 +1,5 @@
 const login = require("./routes/login");
 const urls = require("./routes/urls");
-const { initialSet } = require("./functions/redis");
 const cors = require("cors");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
@@ -47,24 +46,24 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 
 // require("./startup/db")();
-initialSet();
 app.use("/auth", login);
 app.use("/", urls);
 
-const PORT = 3000 || process.env.PORT;
+const PORT = process.env.PORT || 3001;
 mongoose
   .connect(process.env.MONGO_CONNECTION_STRING)
   .then(() => {
     console.log("Connected to Database...");
     app.listen(PORT, () => {
       console.log(`Server connected on ${PORT}...`);
+      console.log('CORS enabled for http://localhost:5173 and http://127.0.0.1:5173');
     });
   })
   .catch((err) => console.log(err));

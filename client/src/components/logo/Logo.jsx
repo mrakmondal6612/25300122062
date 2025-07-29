@@ -1,5 +1,5 @@
 import "./logo.css";
 const Logo = () => {
-  return <div className="logo">EzyLink</div>;
+  return <div className="logo">AKShorter</div>;
 };
 export default Logo;

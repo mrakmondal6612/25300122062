@@ -8,18 +8,22 @@ passport.use(
     {
       clientID: process.env.AUTH_CLIENT_ID,
       clientSecret: process.env.AUTH_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/api/login/callback",
+      passReqToCallback: true,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:8080/auth/api/login/callback",
     },
-    async (accessToken, refreshToken, profile, cb) => {
+    async (req, accessToken, refreshToken, profile, cb) => {
+      if (!profile || !profile.id) {
+        return cb(new Error('No profile returned from Google'), null);
+      }
       let user = await User.findOne({ googleId: profile.id });
       if (user) {
         cb(null, profile);
       } else {
         user = await User.create({
           googleId: profile.id,
-          email: profile.emails[0].value,
-          name: profile.displayName,
-          profilePic: profile.photos[0].value,
+          email: profile.emails && profile.emails[0] ? profile.emails[0].value : '',
+          name: profile.displayName || '',
+          profilePic: profile.photos && profile.photos[0] ? profile.photos[0].value : '',
         });
         cb(null, profile);
       }

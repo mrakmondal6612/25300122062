@@ -3,7 +3,26 @@ const { ensurAuthenticated } = require("../middleware/auth");
 const { limiter } = require("../middleware/rateLimit");
 const { UrlData } = require("../models/paidUrl");
 const { Url } = require("../models/url");
-const { redis } = require("../functions/redis");
+// Redis removed, using in-memory counter
+let inMemoryCounter = 1;
+
+// On server start, set inMemoryCounter to the next available value
+async function initializeCounter() {
+  // Find the highest shortUrl in the database
+  const allUrls = await Url.find({}).select({ shortUrl: 1 });
+  let max = 0;
+  allUrls.forEach((doc) => {
+    try {
+      const val = base62.decode(doc.shortUrl);
+      if (typeof val === 'number' && val > max) max = val;
+    } catch (e) {}
+  });
+  inMemoryCounter = max + 1;
+  console.log('Short link counter initialized to', inMemoryCounter);
+}
+
+// Call this function on module load
+initializeCounter();
 const base62 = require("base-62.js");
 const mongoose = require("mongoose");
 const express = require("express");
@@ -29,24 +48,22 @@ router.post("/api/url/free", limiter, async (req, res) => {
   let i = 0,
     shortUrl;
   do {
-    const count = await redis.get("counter");
-    shortUrl = base62.encode(count);
+    shortUrl = base62.encode(inMemoryCounter);
     const findUrl = await Url.findOne({ shortUrl });
     if (!findUrl) {
       i = -1;
     } else {
-      await redis.incr("counter");
+      inMemoryCounter++;
     }
   } while (i >= 0);
 
-  const rcount = await redis.get("counter");
   const cliUrl = process.env.SERVER_HOST + shortUrl;
   const newUrl = new Url({
     longUrl,
     shortUrl,
   });
   await newUrl.save();
-  await redis.incr("counter");
+  inMemoryCounter++;
   const shortUrlRes = {
     shortUrl: cliUrl,
   };
@@ -68,9 +85,8 @@ router.post("/api/url/paid", ensurAuthenticated, async (req, res) => {
     }
     shortUrl = custom;
   } else {
-    const count = await redis.get("counter");
-    shortUrl = base62.encode(count);
-    await redis.incr("counter");
+    shortUrl = base62.encode(inMemoryCounter);
+    inMemoryCounter++;
   }
 
   const cliUrl = process.env.SERVER_HOST + shortUrl;

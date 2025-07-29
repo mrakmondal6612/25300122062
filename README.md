@@ -17,7 +17,7 @@ Efficiently manage and shorten URLs with our MERN stack URL Shortener. This proj
   - MongoDB
 
 - **Deployment:**
-  - Render (Live Deployment: [https://ezylink.onrender.com])
+
 
 - **Authentication:**
   - Google OAuth 2.0 using Passport.js

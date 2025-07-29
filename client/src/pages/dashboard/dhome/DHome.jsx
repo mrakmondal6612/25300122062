@@ -1,15 +1,17 @@
-import { Chart } from "react-google-charts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import MapLibreMap from "./MapLibreMap";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Loadere from "../../../components/loader/Loadere";
 import dashpic from "../../../assets/dashboard.png";
 import "./dhome.css";
+// Google Chart import removed
 const DHome = ({ userData }) => {
   const [hloader, setHLoader] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [refresh, setRefresh] = useState(true);
   const [total, setTotal] = useState("");
-  const [geoDatas, setGeoDatas] = useState([]);
+  const [geoDatas, setGeoDatas] = useState([]); // [['country', 'click'], ['Bangladesh', 10], ...]
   const [kdata, setKdata] = useState([]);
   useEffect(() => {
     const userId = {
@@ -44,17 +46,34 @@ const DHome = ({ userData }) => {
     getData();
   }, [refresh]);
 
-  const color = {
-    colorAxis: { colors: ["#e3effb", "#0276ff"] },
-    mapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "YOUR_GOOGLE_MAPS_API_KEY",
+  // Helper: country name to lat/lng (minimal, demo; for real use, use a lookup or geocoding API)
+  // For production, use a backend API or a geocoding service for all countries
+  const countryCoords = {
+    Bangladesh: [23.685, 90.3563],
+    India: [20.5937, 78.9629],
+    USA: [37.0902, -95.7129],
+    Canada: [56.1304, -106.3468],
+    UK: [55.3781, -3.4360],
+    Germany: [51.1657, 10.4515],
+    France: [46.6034, 1.8883],
+    Australia: [-25.2744, 133.7751],
+    // Add more as needed
   };
 
-  const linedatas = [[{ type: "date", label: "Day" }, "Clicks"]];
+  // Prepare marker data for MapLibreMap from backend geoDatas
+  const markers = Array.isArray(geoDatas) && geoDatas.length > 1
+    ? geoDatas.slice(1).map(([country, click]) => {
+        const coords = countryCoords[country];
+        return coords ? { lng: coords[1], lat: coords[0], label: `<b>${country}</b><br/>Clicks: ${click}`, id: country } : null;
+      }).filter(Boolean)
+    : [];
 
-  kdata.map((item) => {
-    const { date, click } = item;
-    linedatas.push([new Date(date), click]);
-  });
+  // Example: handle marker click (show alert or custom logic)
+  const handleMarkerClick = ({ id, label }) => {
+    alert(`Country: ${id}\n${label.replace(/<[^>]+>/g, '')}`);
+  };
+
+  // Line chart data and usage removed (Google Charts dependency removed)
 
   const handleRotation = () => {
     setRotation(rotation + 360);
@@ -86,25 +105,22 @@ const DHome = ({ userData }) => {
           </div>
           <div className="box box-2">
             <span className="box-title">Weekly data</span>
-            <div className="box-chart">
-              <Chart
-                className="char"
-                chartType="Line"
-                style={{ height: "100%", width: "100%" }}
-                data={linedatas}
-              />
+            <div className="box-chart" style={{ height: 200, width: '100%' }}>
+              <ResponsiveContainer width="100%" height={200}>
+                <LineChart data={kdata} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="click" stroke="#0276ff" strokeWidth={2} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           </div>
           <div className="box box-3">
-            <span className="box-title">Geo data</span>
-            <div className="box-chart">
-              <Chart
-                className="char"
-                chartType="GeoChart"
-                options={color}
-                style={{ height: "100%", width: "100%" }}
-                data={geoDatas}
-              />
+            <span className="box-title">Geo data (MapLibre/OSM)</span>
+            <div className="box-chart" style={{ height: 400, width: '100%' }}>
+              <MapLibreMap markers={markers} markerColor="#0276ff" onMarkerClick={handleMarkerClick} />
             </div>
           </div>
         </div>

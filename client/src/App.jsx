@@ -11,11 +11,15 @@ import ErrorPage from "./pages/404/ErrorPage";
 import { AnimatePresence } from "framer-motion";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
+
+
+export const ThemeContext = createContext({ theme: "light", setTheme: () => {} });
 
 function App() {
   const [user, setUser] = useState(null);
   const { isOpen } = useSelector((store) => store.loginPage);
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
     const getUser = () => {
@@ -39,31 +43,37 @@ function App() {
     };
     getUser();
   }, []);
+  useEffect(() => {
+    document.body.classList.toggle("dark", theme === "dark");
+  }, [theme]);
+
   return (
-    <AnimatePresence>
-      {isOpen && <Login key={1} />}
-      <Routes key={2}>
-        <Route path="/" element={user ? null : <Home />}>
-          <Route
-            index
-            element={user ? <Navigate to="/dashboard" /> : <Url />}
-          ></Route>
-          <Route path="about" element={<About />}></Route>
-          <Route
-            path="dashboard"
-            element={
-              user ? <Dashboard userData={user} /> : <Navigate to={"/"} />
-            }
-          >
-            <Route path="" element={<DHome userData={user} />} />
-            <Route path="newlink" element={<NewLink userData={user} />} />
-            <Route path="analytics" element={<Analytics userData={user} />} />
-            <Route path="links" element={<Alink userData={user} />} />
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      <AnimatePresence>
+        {isOpen && <Login key={1} />}
+        <Routes key={2}>
+          <Route path="/" element={user ? null : <Home user={user} />}> 
+            <Route
+              index
+              element={user ? <Navigate to="/dashboard" /> : <Url />}
+            ></Route>
+            <Route path="about" element={<About />}></Route>
+            <Route
+              path="dashboard"
+              element={
+                user ? <Dashboard userData={user} user={user} /> : <Navigate to={"/"} />
+              }
+            >
+              <Route path="" element={<DHome userData={user} />} />
+              <Route path="newlink" element={<NewLink userData={user} />} />
+              <Route path="analytics" element={<Analytics userData={user} />} />
+              <Route path="links" element={<Alink userData={user} />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" replace />}></Route>
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />}></Route>
-        </Route>
-      </Routes>
-    </AnimatePresence>
+        </Routes>
+      </AnimatePresence>
+    </ThemeContext.Provider>
   );
 }
 

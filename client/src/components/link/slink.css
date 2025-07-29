@@ -15,12 +15,21 @@
 }
 
 .slink-container:hover{
-  background-color: #f0f0f0
+  background-color: #f0f0f0;
+}
+.dark .slink-container:hover {
+  background-color: #23232a;
 }
 
 .slink-item:nth-child(3) {
   color: black;
   justify-content: start;
+}
+.dark .slink-item {
+  color: #e3effb;
+}
+.dark .slink-item:nth-child(3) {
+  color: #4f8cff;
 }
 
 @media (max-width: 768px) {

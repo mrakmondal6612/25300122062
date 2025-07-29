@@ -1,7 +1,7 @@
 .sidebar-main {
   position: absolute;
   width: 240px;
-  background-color: white;
+  background-color: var(--sidebar-bg, white);
   height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -20,6 +20,27 @@
 .sidebar-link {
   padding: 10px 20px;
   border-bottom: 1px solid #e3effb;
+  color: #23232a;
+  transition: background 0.2s, color 0.2s;
+}
+.sidebar-link:active,
+.sidebar-link.active {
+  background: #e3effb;
+  color: #0276ff;
+}
+/* Dark mode for sidebar */
+.dark .sidebar-main {
+  --sidebar-bg: #18181b;
+  box-shadow: 0px 4px 25px -1px #23232a;
+}
+.dark .sidebar-link {
+  color: #e3effb;
+  border-bottom: 1px solid #23232a;
+}
+.dark .sidebar-link:active,
+.dark .sidebar-link.active {
+  background: #23232a;
+  color: #4f8cff;
 }
 
 .sidebar-close {

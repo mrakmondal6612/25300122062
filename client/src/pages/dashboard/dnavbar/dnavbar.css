@@ -1,3 +1,10 @@
+/* Dark mode for DNavbar theme switch button */
+.dark .dnav-links button {
+  background: #232a36 !important;
+  color: #f1f1f1 !important;
+  border: 1px solid #232a36 !important;
+  box-shadow: 0 2px 8px #0003 !important;
+}
 .dnavbar {
   width: 100%;
   padding: 40px 50px 10px 50px;

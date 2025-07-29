@@ -6,14 +6,14 @@ import { useSelector } from "react-redux";
 import "./dashboard.css";
 import DSmallMenu from "./dsmallMenu/DSmallMenu";
 import Credit from "../credit/Credit";
-const Dashboard = ({ userData }) => {
+const Dashboard = ({ userData, user }) => {
   const { isLargeMenu } = useSelector((store) => store.lgMenuPage);
   const { isCredit } = useSelector((store) => store.creditPage);
   return (
     <>
       {isCredit && <Credit />}
       <div className="dash-main">
-        <DNavbar userData={userData} />
+        <DNavbar userData={userData} user={user} />
         <div className="dash-container flex-grow-1">
           <div
             className="menu-container"

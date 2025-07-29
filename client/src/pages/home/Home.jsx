@@ -5,13 +5,13 @@ import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import "./home.css";
-const Home = () => {
+const Home = ({ user }) => {
   const { isCredit } = useSelector((store) => store.creditPage);
   return (
     <AnimatePresence>
       {isCredit && <Credit key={10} />}
       <div className="home-container" key={3}>
-        <Navigationbar />
+        <Navigationbar user={user} />
         <div className="home-content-container flex-grow-1" key={4}>
           <Outlet />
         </div>

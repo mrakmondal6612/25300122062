@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: white;
+  background-color: var(--dashboard-bg, white);
   border-radius: 10px;
   box-shadow: 0px 4px 25px -1px #e3effb;
   gap: 10px;
@@ -61,12 +61,7 @@
   padding: 15px;
   border-radius: 10px;
   border: 1px solid #a6b3c7;
-  background: #e3effb;
-
-  &:focus {
-    outline: #0276ff solid 1px;
-    outline-offset: -1px;
-  }
+  background: var(--input-bg, #e3effb);
 }
 
 .custom-input {
@@ -113,12 +108,7 @@
   padding: 15px;
   border-radius: 10px;
   border: 1px solid #a6b3c7;
-  background: #e3effb;
-
-  &:focus {
-    outline: #0276ff solid 1px;
-    outline-offset: -1px;
-  }
+  background: var(--input-bg, #e3effb);
 }
 
 .place::placeholder {
@@ -132,6 +122,20 @@
   padding: 10px;
   border-radius: 10px;
   background: #0276ff;
+  color: #e3effb;
+}
+/* Dark mode overrides for New Link page */
+.dark .newlink-container {
+  --dashboard-bg: #18181b;
+  box-shadow: 0px 4px 25px -1px #23232a;
+}
+.dark .nurl-input input,
+.dark .custom-input input {
+  --input-bg: #23232a;
+  color: #e3effb;
+}
+.dark .newlink-heading,
+.dark .link-slogan {
   color: #e3effb;
 }
 

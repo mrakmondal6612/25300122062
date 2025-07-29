@@ -5,7 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { lgMenuToggle } from "./dlmSlice";
 import "./dnavbar.css";
 import { smMenuOpen } from "./dsmSlice";
-const DNavbar = ({ userData }) => {
+import { useContext } from "react";
+import { ThemeContext } from "../../../App";
+const DNavbar = ({ userData, user }) => {
+  const { theme, setTheme } = useContext(ThemeContext);
+  const handleThemeToggle = () => setTheme(theme === "light" ? "dark" : "light");
   const { isLargeMenu } = useSelector((store) => store.lgMenuPage);
   const dispatch = useDispatch();
   return (
@@ -40,6 +44,27 @@ const DNavbar = ({ userData }) => {
         </div>
       </div>
       <div className="dnav-links">
+        {user && (
+          <button
+            onClick={handleThemeToggle}
+            style={{
+              marginRight: 24,
+              background: theme === "dark" ? "#232a36" : "#fff",
+              color: theme === "dark" ? "#f1f1f1" : "#232a36",
+              border: "1px solid #e0e6ed",
+              borderRadius: 8,
+              padding: "6px 16px",
+              fontWeight: 600,
+              fontSize: 15,
+              boxShadow: "0 2px 8px #0001",
+              cursor: "pointer",
+              transition: "all 0.2s"
+            }}
+            aria-label="Switch theme"
+          >
+            {theme === "dark" ? "🌙 Dark" : "☀️ Light"}
+          </button>
+        )}
         <div className="dnav-user">
           <span>{userData.name}</span>
           <img src={userData.picture} alt={userData.name} />

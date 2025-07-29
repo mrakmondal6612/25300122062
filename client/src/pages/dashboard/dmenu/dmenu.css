@@ -19,10 +19,10 @@
   padding: 10px 15px;
   border-radius: 10px;
   gap: 20px;
-
-  &:hover {
-    background-color: #f0f0f0;
-  }
+  transition: background 0.2s, color 0.2s;
+}
+.link:hover {
+  background-color: #f0f0f0;
 }
 
 .new {
@@ -33,6 +33,19 @@
   border-radius: 10px;
   gap: 20px;
   background-color: #e3effb;
+  transition: background 0.2s, color 0.2s;
+}
+/* Dark mode for dashboard left menu */
+.dark .link {
+  color: #e3effb;
+}
+.dark .link:hover {
+  background-color: #23232a;
+  color: #4f8cff;
+}
+.dark .new {
+  color: #e3effb;
+  background-color: #23232a;
 }
 
 .dash-m-tooltip {

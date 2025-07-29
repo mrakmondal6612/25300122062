@@ -19,7 +19,7 @@
   justify-items: center;
   align-items: center;
   border-radius: 10px;
-  background-color: white;
+  background-color: var(--dashboard-bg, white);
   box-shadow: 0px 4px 25px -1px #e3effb;
 }
 
@@ -83,8 +83,26 @@
   padding: 15px;
   background: none;
   border-radius: 10px;
-  background-color: white;
+  background-color: var(--dashboard-bg, white);
   box-shadow: 0px 4px 25px -1px #e3effb;
+}
+/* Dark mode overrides for dashboard home */
+.dark .dhome-no,
+.dark .box {
+  --dashboard-bg: #18181b;
+  box-shadow: 0px 4px 25px -1px #23232a;
+}
+.dark .no-title,
+.dark .dhome-no-in,
+.dark .box-title {
+  color: #e3effb;
+}
+.dark .navi-link {
+  background-color: #23232a;
+  color: #e3effb;
+}
+.dark .link-count {
+  color: #4f8cff;
 }
 
 .box-title {

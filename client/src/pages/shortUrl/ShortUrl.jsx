@@ -37,10 +37,10 @@ const ShortUrl = ({ urldata }) => {
           <a href={urldata} target="_blank">{urldata}</a>
         </div>
         <div className="shortUrl-share">
-          <i key="copy-2xl" className="fa-regular fa-copy fa-2xl" onClick={copyUrl}></i>
-          <i key="copy-xl" className="fa-regular fa-copy fa-xl" onClick={copyUrl}></i>
-          <i key="wa-2xl" className="fa-brands fa-whatsapp fa-2xl" onClick={copyWhatsapp}></i>
-          <i key="wa-xl" className="fa-brands fa-whatsapp fa-xl" onClick={copyWhatsapp}></i>
+          <i className="fa-regular fa-copy fa-2xl" onClick={copyUrl}></i>
+          <i className="fa-regular fa-copy fa-xl" onClick={copyUrl}></i>
+          <i className="fa-brands fa-whatsapp fa-2xl" onClick={copyWhatsapp}></i>
+          <i className="fa-brands fa-whatsapp fa-xl" onClick={copyWhatsapp}></i>
         </div>
         {isCopied && (
           <>
@@ -57,14 +57,12 @@ const ShortUrl = ({ urldata }) => {
         )}
         <div className="shortUrl-close">
           <i
-            key="close-2xl"
             className="fa-solid fa-xmark fa-2xl"
             onClick={() => {
               dispatch(getUrlClose());
             }}
           ></i>
           <i
-            key="close-xl"
             className="fa-solid fa-xmark fa-xl"
             onClick={() => {
               dispatch(getUrlClose());

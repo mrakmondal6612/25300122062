@@ -37,16 +37,34 @@ const Url = () => {
       body: JSON.stringify(newFree),
       credentials: "include",
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.ok) {
-          return res.json();
+          const text = await res.text();
+          try {
+            const data = JSON.parse(text);
+            return data;
+          } catch (e) {
+            // Already an object
+            return text;
+          }
         } else {
           setLoading(false);
           dispatch(openLimit());
         }
       })
       .then((data) => {
-        const { shortUrl } = data;
+        console.log('Short URL API response:', data);
+        let shortUrl = "";
+        if (typeof data === "string") {
+          try {
+            const parsed = JSON.parse(data);
+            shortUrl = parsed.shortUrl;
+          } catch (e) {
+            shortUrl = "";
+          }
+        } else if (data && data.shortUrl) {
+          shortUrl = data.shortUrl;
+        }
         setShortUrl(shortUrl);
         setLoading(false);
         dispatch(getUrlOpen());
@@ -60,7 +78,7 @@ const Url = () => {
           {loading && <Loadere />}
         </div>
         <div className="url-short">
-          {getUrl && <ShortUrl urldata={shortUrl} key={5} />}
+          {getUrl && <ShortUrl urldata={shortUrl} />}
         </div>
         <div className="url-container" key={6}>
           <div className="url-shortner">
@@ -76,7 +94,7 @@ const Url = () => {
               <input
                 type="text"
                 id="lurl"
-                placeholder="https://ezylink.in/xyz..."
+                placeholder="https://google.com/xyz..."
                 value={url ? url : urlError}
                 onFocus={() => {
                   setUrlError("");

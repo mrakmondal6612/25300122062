@@ -80,8 +80,8 @@ const Alink = ({ userData }) => {
               </div>
               <div className="alink-item">
                 {urlData.map((url, index) => {
-                  // Use url._id if available, otherwise fallback to index
-                  return <Slink {...url} sr={index} key={url._id || index} />;
+                  // Use url.shortUrl if available, then _id, then index for unique key
+                  return <Slink {...url} sr={index} key={url.shortUrl || url._id || index} />;
                 })}
               </div>
             </div>

@@ -46,6 +46,7 @@ const DHome = ({ userData }) => {
 
   const color = {
     colorAxis: { colors: ["#e3effb", "#0276ff"] },
+    mapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "YOUR_GOOGLE_MAPS_API_KEY",
   };
 
   const linedatas = [[{ type: "date", label: "Day" }, "Clicks"]];

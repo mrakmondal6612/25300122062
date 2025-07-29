@@ -29,6 +29,11 @@ const NewLink = ({ userData }) => {
       setUrlError("Please enter correct URL");
       return;
     }
+    // Custom code validation (if provided)
+    if (custom.trim() && !/^[a-zA-Z0-9]{4,16}$/.test(custom.trim())) {
+      setError("Custom code must be alphanumeric and 4-16 characters");
+      return;
+    }
     setLoading(true);
     fetch(import.meta.env.VITE_URL_PAID, {
       method: "POST",
@@ -38,22 +43,24 @@ const NewLink = ({ userData }) => {
       body: JSON.stringify(newPaid),
       credentials: "include",
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          throw new Error("Network response was not ok");
-        }
-      })
-      .then((data) => {
+      .then(async (res) => {
         setLoading(false);
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data?.error || "Something went wrong");
+          return;
+        }
         if (data?.error) {
           setCustom("");
-          setError("Keyword not available");
+          setError(data.error);
           return;
         }
         setShortUrl(data.shortUrl);
         dispatch(getUrlOpen());
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError("Network error");
       });
   };
   return (
@@ -78,7 +85,7 @@ const NewLink = ({ userData }) => {
                 type="text"
                 id="lurl"
                 value={url ? url : urlError}
-                placeholder="https://ezylink.in/xyz/..."
+                placeholder="https://google.in/xyz/..."
                 onChange={(e) => {
                   setUrl(e.target.value);
                 }}

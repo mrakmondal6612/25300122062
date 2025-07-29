@@ -3,6 +3,7 @@ const { ensurAuthenticated } = require("../middleware/auth");
 const { limiter } = require("../middleware/rateLimit");
 const { UrlData } = require("../models/paidUrl");
 const { Url } = require("../models/url");
+const customLogger = require("../middleware/customLogger");
 // Redis removed, using in-memory counter
 let inMemoryCounter = 1;
 
@@ -25,17 +26,20 @@ async function initializeCounter() {
 initializeCounter();
 const base62 = require("base-62.js");
 const mongoose = require("mongoose");
+
 const express = require("express");
 const router = express.Router();
+router.use(customLogger); // Use custom logging middleware for all routes
 
 router.get("/:shortUrl", async (req, res) => {
   const shortUrl = req.params.shortUrl;
   const url = await Url.findOne({ shortUrl });
   if (!url) {
-    const message = {
-      error: "Link Expired",
-    };
-    return res.send(message);
+    return res.status(404).json({ error: "Short URL not found" });
+  }
+  // Check expiry
+  if (new Date() > url.validTill) {
+    return res.status(410).json({ error: "Link Expired" });
   }
   res.redirect(url.longUrl);
   const clientIp =
@@ -44,9 +48,8 @@ router.get("/:shortUrl", async (req, res) => {
 });
 
 router.post("/api/url/free", limiter, async (req, res) => {
-  const { longUrl } = req.body;
-  let i = 0,
-    shortUrl;
+  const { longUrl, validity } = req.body;
+  let i = 0, shortUrl;
   do {
     shortUrl = base62.encode(inMemoryCounter);
     const findUrl = await Url.findOne({ shortUrl });
@@ -57,31 +60,39 @@ router.post("/api/url/free", limiter, async (req, res) => {
     }
   } while (i >= 0);
 
-  const cliUrl = process.env.SERVER_HOST + shortUrl;
+  // Set expiry
+  let validMinutes = 30;
+  if (typeof validity === 'number' && validity > 0) validMinutes = validity;
+  const validTill = new Date(Date.now() + validMinutes * 60000);
+
+  const cliUrl = process.env.SERVER_HOST.replace(/\/$/, '') + '/' + shortUrl;
   const newUrl = new Url({
     longUrl,
     shortUrl,
+    validTill,
   });
   await newUrl.save();
   inMemoryCounter++;
   const shortUrlRes = {
     shortUrl: cliUrl,
+    validTill,
   };
-  res.send(JSON.stringify(shortUrlRes));
+  res.status(201).json(shortUrlRes);
 });
 
 router.post("/api/url/paid", ensurAuthenticated, async (req, res) => {
   let shortUrl = "";
+  const { longUrl, custom, email, validity } = req.body;
 
-  const { longUrl, custom, email } = req.body;
-
+  // Validate custom shortcode if provided
   if (custom) {
+    // Alphanumeric and length check (4-16 chars)
+    if (!/^[a-zA-Z0-9]{4,16}$/.test(custom)) {
+      return res.status(400).json({ error: "Custom shortcode must be alphanumeric and 4-16 chars" });
+    }
     const findCustom = await Url.findOne({ shortUrl: custom });
     if (findCustom) {
-      const already = {
-        error: "not available",
-      };
-      return res.send(JSON.stringify(already));
+      return res.status(409).json({ error: "Shortcode not available" });
     }
     shortUrl = custom;
   } else {
@@ -89,19 +100,25 @@ router.post("/api/url/paid", ensurAuthenticated, async (req, res) => {
     inMemoryCounter++;
   }
 
-  const cliUrl = process.env.SERVER_HOST + shortUrl;
+  // Set expiry
+  let validMinutes = 30;
+  if (typeof validity === 'number' && validity > 0) validMinutes = validity;
+  const validTill = new Date(Date.now() + validMinutes * 60000);
 
+  const cliUrl = process.env.SERVER_HOST.replace(/\/$/, '') + '/' + shortUrl;
   const newUrl = new Url({
     longUrl,
     shortUrl,
+    validTill,
   });
   await newUrl.save();
 
   const shortUrlRes = {
     shortUrl: cliUrl,
+    validTill,
   };
 
-  res.send(JSON.stringify(shortUrlRes));
+  res.status(201).json(shortUrlRes);
 
   //UrlData Storing
   const newUrlData = new UrlData({

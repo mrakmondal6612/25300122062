@@ -27,7 +27,11 @@ function App() {
         method: "GET",
         credentials: "include",
       })
-        .then((res) => {
+        .then(async (res) => {
+          // Debug: log response headers and cookies
+          console.log("Login check response headers:", Array.from(res.headers.entries()));
+          // Try to read cookies (will only show if same-origin or browser allows)
+          console.log("Document cookies after login check:", document.cookie);
           if (res.ok) {
             return res.json();
           } else {

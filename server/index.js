@@ -11,7 +11,8 @@ const app = express();
 require("dotenv").config();
 require("./startup/passport");
 
-app.set("trust proxy", 1);
+// Trust proxy for correct secure cookies behind reverse proxies (e.g., Render)
+app.set("trust proxy", true);
 
 app.get("/", (req, res) => {
   res.redirect("/api/hello");
@@ -31,7 +32,10 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV !== "development",
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-      // domain: process.env.NODE_ENV === "development" ? "localhost" : "ezylink",
+      domain:
+        process.env.NODE_ENV === "development"
+          ? undefined
+          : ".vercel.app", // allow cookie for all subdomains of vercel.app
       maxAge: 7 * 24 * 60 * 60 * 1000,
     },
     store: MongoStore.create({

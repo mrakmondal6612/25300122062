@@ -12,6 +12,11 @@ router.get(
 
 // /users/me
 router.get("/api/login/success", (req, res) => {
+  // Debug: log session and cookies
+  console.log("[LOGIN SUCCESS] req.sessionID:", req.sessionID);
+  console.log("[LOGIN SUCCESS] req.session:", req.session);
+  console.log("[LOGIN SUCCESS] req.user:", req.user);
+  console.log("[LOGIN SUCCESS] req.cookies:", req.cookies);
   res.status(200).json({
     success: true,
     message: "Log in successfully",

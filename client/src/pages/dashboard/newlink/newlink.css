@@ -1,0 +1,200 @@
+.newlink-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 25px -1px #e3effb;
+  gap: 10px;
+}
+.newlink-shortUrl {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.loader-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.newlink-heading {
+  font-size: 35px;
+  font-weight: 500;
+  padding: 10px;
+  text-align: center;
+}
+
+.newlink-heading span {
+  color: #0276ff;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.link-slogan {
+  font-size: 18px;
+}
+.newlink-inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 700px));
+  gap: 30px;
+  padding: 15px;
+  overflow: hidden;
+}
+
+.nurl-input {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.nurl-input label {
+  font-weight: 500;
+}
+
+.nurl-input input {
+  height: 50px;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #a6b3c7;
+  background: #e3effb;
+
+  &:focus {
+    outline: #0276ff solid 1px;
+    outline-offset: -1px;
+  }
+}
+
+.custom-input {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-auto-flow: column;
+  gap: 30px;
+  align-items: center;
+}
+
+.custom-input span {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 12px 50px;
+  border-radius: 10px;
+  background-size: 400%;
+  background-image: linear-gradient(
+    45deg,
+    rgba(192, 233, 239, 1) 0%,
+    rgba(196, 216, 243, 1) 25%,
+    rgba(200, 199, 247, 1) 50%,
+    rgba(204, 181, 251, 1) 75%,
+    rgba(208, 164, 255, 1) 100%
+  );
+  animation: ani 1s infinite alternate;
+}
+
+@keyframes ani {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.custom-input input {
+  width: 100%;
+  height: 50px;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #a6b3c7;
+  background: #e3effb;
+
+  &:focus {
+    outline: #0276ff solid 1px;
+    outline-offset: -1px;
+  }
+}
+
+.place::placeholder {
+  color: #a6b3c7;
+}
+
+.newlink-submit button {
+  height: 50px;
+  width: 100%;
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #0276ff;
+  color: #e3effb;
+}
+
+@media (max-width: 1024px) {
+  .newlink-heading {
+    font-size: 30px;
+    font-weight: 500;
+  }
+
+  .newlink-heading span {
+    font-weight: 600;
+  }
+}
+
+/* sm */
+@media (max-width: 640px) {
+  .place::placeholder {
+    font-size: 14px;
+  }
+
+  .place {
+    font-size: 14px;
+  }
+
+  .newlink-heading {
+    font-size: 20px;
+  }
+
+  .newlink-heading span {
+    font-size: 20px;
+  }
+
+  .link-slogan {
+    font-size: 16px;
+  }
+
+  .newlink-inner {
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .nurl-input input {
+    height: 40px;
+    padding: 10px 15px;
+  }
+
+  .custom-input {
+    gap: 20px;
+  }
+
+  .custom-input span {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  .custom-input input {
+    height: 40px;
+    padding: 10px 15px;
+  }
+
+  .newlink-submit button {
+    height: 40px;
+    font-size: 16px;
+    padding: 10px;
+  }
+}

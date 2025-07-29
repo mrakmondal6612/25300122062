@@ -1,0 +1,24 @@
+.home-container {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-content-container {
+  padding: 5px 50px;
+}
+
+.home-footer-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  justify-items: center;
+  align-items: center;
+}
+
+
+@media (max-width: 640px) {
+  .home-content-container {
+    padding: 5px 20px;
+  }
+}

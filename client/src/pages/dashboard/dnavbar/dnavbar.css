@@ -1,0 +1,97 @@
+.dnavbar {
+  width: 100%;
+  padding: 40px 50px 10px 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dnav-logo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dnav-logo span:hover {
+  cursor: pointer;
+}
+
+.dnav-menu {
+  padding: 15px;
+  border-radius: 50%;
+}
+
+.dnav-menu:hover {
+  background-color: #ececec;
+}
+
+.dsm {
+  display: none;
+}
+
+.dnav-title {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.dnav-user {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-weight: 500;
+}
+
+.dnav-user img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: drop-shadow(0px 4px 4px #e3effb);
+}
+
+@media screen and (max-width: 1536px) {
+  .dnav-user img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .dnav-user img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .dnav-user span {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .dsm {
+    display: initial;
+  }
+  .dlg {
+    display: none;
+  }
+  .dnavbar {
+    padding: 20px 30px 10px 30px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .dnavbar {
+    padding: 20px 20px 10px 20px;
+  }
+  .material-icons-outlined.md-18 {
+    font-size: 18px;
+  }
+
+  .dnav-user span {
+    display: none;
+  }
+}

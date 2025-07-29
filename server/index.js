@@ -46,7 +46,11 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "https://short-url-ak.vercel.app"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -63,7 +67,7 @@ mongoose
     console.log("Connected to Database...");
     app.listen(PORT, () => {
       console.log(`Server connected on ${PORT}...`);
-      console.log('CORS enabled for http://localhost:5173 and http://127.0.0.1:5173');
+      console.log('CORS enabled for http://localhost:5173, http://127.0.0.1:5173, and https://short-url-ak.vercel.app');
     });
   })
   .catch((err) => console.log(err));
